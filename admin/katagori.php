@@ -18,7 +18,6 @@ if (isset($_POST["tambah"])) {
                 alert(' katagori gagal ditambahkan!');
                 document.location.href = 'katagori.php';
             </script>";
-        exit;
     }
 }
 

@@ -8,11 +8,26 @@ session_start();
 
 require 'function.php';
 
-$barang = query("SELECT * FROM barang");
+$id = $_GET["id"];
+
+$barang = query("SELECT * FROM barang WHERE id = $id")[0];
 
 $katagori = query("SELECT * FROM katagori");
 
 $keranjang = query("SELECT * FROM keranjang");
+
+
+if (isset($_POST["submit"])) {
+    if (keranjang($_POST) > 0) {
+        echo "<script>
+                alert('Anda menambahkan Barang!');
+            </script>";
+    } else {
+        echo "<script>
+                alert('Gagal menambahkan barang!');
+            </script>";
+    }
+}
 
 
 ?>
@@ -48,10 +63,10 @@ $keranjang = query("SELECT * FROM keranjang");
         <a href="#" class="logo text-decoration-none"> <i class="fas fa-shopping-basket"></i> Nasi Uduk </a>
 
         <nav class="navbar">
-            <a href="#home" class="text-decoration-none">home</a>
+            <a href="index.php" class="text-decoration-none">home</a>
             <!-- <a href="#features">features</a> -->
-            <a href="#products" class="text-decoration-none">products</a>
-            <a href="#categories" class="text-decoration-none">categories</a>
+            <a href="index.php" class="text-decoration-none">products</a>
+            <a href="index.php" class="text-decoration-none">categories</a>
             <!-- <a href="#review">review</a> -->
             <!-- <a href="#blogs">blogs</a> -->
         </nav>
@@ -127,167 +142,37 @@ $keranjang = query("SELECT * FROM keranjang");
 
     <!-- home section ends -->
 
-    <!-- features section starts  -->
+    <!-- product -->
 
-    <!-- <section class="features" id="features">
-
-        <h1 class="heading"> our <span>features</span> </h1>
-
-        <div class="box-container">
-
-            <div class="box">
-                <img src="image/feature-img-1.png" alt="">
-                <h3>fresh and organic</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt, earum!</p>
-                <a href="#" class="btn">read more</a>
-            </div>
-
-            <div class="box">
-                <img src="image/feature-img-2.png" alt="">
-                <h3>free delivery</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt, earum!</p>
-                <a href="#" class="btn">read more</a>
-            </div>
-
-            <div class="box">
-                <img src="image/feature-img-3.png" alt="">
-                <h3>easy payments</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt, earum!</p>
-                <a href="#" class="btn">read more</a>
-            </div>
-
-        </div>
-
-    </section> -->
-
-    <!-- features section ends -->
-
-    <!-- products section starts  -->
-
-    <section class="products" id="products">
-
-        <h1 class="heading"> our <span>products</span> </h1>
-
-        <div class="swiper product-slider">
-
-            <div class="swiper-wrapper">
-
-                <?php foreach ($barang as $row) : ?>
-                    <div class="swiper-slide box">
-                        <img src="admin/img/<?= $row["gambar"] ?>" alt="<?= $row["gambar"] ?>">
-                        <h3><?= $row["nama"] ?></h3>
-                        <div class="price"><?= $row["harga"] ?></div>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
+    <section class="product">
+        <div class="container">
+            <div class="row">
+                <div class="col align-self-center">
+                    <div class="card mb-3">
+                        <img src="admin/img/<?= $barang["gambar"] ?>" class="card-img-top" alt="<?= $barang["gambar"] ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $barang["nama"] ?></h5>
+                            <p class="card-text"><?= $barang["nama"] ?></p>
+                            <form action="" method="post">
+                                <input type="hidden" name="orderid" value="<?= $barang["id"] ?>">
+                                <input type="hidden" name="gambar" value="<?= $barang["gambar"] ?>">
+                                <input type="hidden" name="nama" value="<?= $barang["nama"] ?>">
+                                <input type="hidden" name="harga" value="<?= $barang["harga"] ?>">
+                                <button type="submit" name="submit" class="btn btn-outline-primary">Keranjang</button>
+                            </form>
+                            <a href="beli.php?id=<?= $barang["id"] ?>" type="button" class="btn btn-outline-primary">Beli</a>
                         </div>
-                        <a href="lihat.php?id=<?= $row["id"] ?>" class="btn text-decoration-none">Order</a>
                     </div>
-                <?php endforeach; ?>
 
+
+                </div>
             </div>
-
         </div>
-
-
+        </div>
     </section>
 
-    <!-- products section ends -->
+    <!-- product -->
 
-    <!-- categories section starts  -->
-
-    <section class="categories" id="categories">
-
-        <h1 class="heading"> product <span>categories</span> </h1>
-
-        <div class="box-container">
-
-            <?php foreach ($katagori as $row) : ?>
-                <div class="box">
-                    <img src="https://source.unsplash.com/500x400?<?= $row["nama"] ?>" alt="<?= $row["nama"] ?>">
-                    <h3><?= $row["nama"] ?></h3>
-                    <a href="#products" class="btn">shop now</a>
-                </div>
-            <?php endforeach; ?>
-
-        </div>
-
-    </section>
-
-    <!-- categories section ends -->
-
-    <!-- review section starts  -->
-
-    <!-- <section class="review" id="review">
-
-        <h1 class="heading"> customer's <span>review</span> </h1>
-
-        <div class="swiper review-slider">
-
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide box">
-                    <img src="image/pic-1.png" alt="">
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime ad tempore quasi tenetur.</p>
-                    <h3>john deo</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
-
-                <div class="swiper-slide box">
-                    <img src="image/pic-2.png" alt="">
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime ad tempore quasi tenetur.</p>
-                    <h3>john deo</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
-
-                <div class="swiper-slide box">
-                    <img src="image/pic-3.png" alt="">
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime ad tempore quasi tenetur.</p>
-                    <h3>john deo</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
-
-                <div class="swiper-slide box">
-                    <img src="image/pic-4.png" alt="">
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde sunt fugiat dolore ipsum id est maxime ad tempore quasi tenetur.</p>
-                    <h3>john deo</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section> -->
-
-    <!-- review section ends -->
 
     <!-- footer section starts  -->
 

@@ -11,7 +11,7 @@ require '../function.php';
 
 $id = $_GET["id"];
 
-if (hapusKatagori($id) or hapusbarang($id)  > 0) {
+if (hapusKatagori($id)  > 0) {
     echo "
         <script>
             alert('data berhasil dihapus!');

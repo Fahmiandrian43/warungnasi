@@ -9,8 +9,6 @@ if (!$_SESSION['status'] > 0) {
 
 if (isset($_POST["tambah"])) {
     if (barang($_POST) > 0) {
-
-
         echo "<script>
                 alert('barang baru berhasil ditambahkan!');
                 document.location.href = 'barang.php';
@@ -20,11 +18,28 @@ if (isset($_POST["tambah"])) {
         "<script>
                 alert('barang gagal ditambahkan!');
                 document.location.href = 'barang.php';
-            </script>";
+        </script>";
     }
 }
 
 $barang = query("SELECT * FROM barang");
+
+if (isset($_POST["delete"])) {
+    $id = $_POST["delete_id"];
+    $image = $_POST["del_image"];
+
+    $query = "DELETE FROM barang WHERE id = '$id'";
+    $query_run = mysqli_query($conn, $query);
+
+    if ($query_run) {
+        unlink("img/" . $image);
+        echo
+        "<script>
+            alert('barang gagal ditambahkan!');
+            document.location.href = 'barang.php';
+        </script>";
+    }
+}
 
 
 ?>
@@ -218,13 +233,13 @@ $barang = query("SELECT * FROM barang");
                             <!-- User Account -->
                             <li class="dropdown user-menu">
                                 <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                    <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
+                                    <!-- <img src="assets/img/user/user.png" class="user-image" alt="User Image" /> -->
                                     <span class="d-none d-lg-inline-block"><?= $_SESSION['nama'] ?></span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <!-- User image -->
                                     <li class="dropdown-header">
-                                        <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
+                                        <!-- <img src="assets/img/user/user.png" class="img-circle" alt="User Image" /> -->
                                         <div class="d-inline-block">
                                             <?= $_SESSION['nama'] ?> <small class="pt-1">iamabdus@gmail.com</small>
                                         </div>
@@ -340,9 +355,11 @@ $barang = query("SELECT * FROM barang");
                                         <td>Rp. <?= $row["harga"] ?></td>
                                         <td><?= $row["katagori"] ?></td>
                                         <td>
-                                            <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                <a href="hapusAdmin.php?id=<?= $row["id"] ?>" type="button" class="btn btn-outline-primary">Delete</a>
-                                            </div>
+                                            <form action="" method="post">
+                                                <input type="hidden" name="delete_id" value="<?= $row["id"] ?>">
+                                                <input type="hidden" name="del_image" value="<?= $row["gambar"] ?>">
+                                                <button type="submit" name="delete" class="btn btn-primary">Delete</button>
+                                            </form>
                                         </td>
                                     </tr>
                                     <?php $i++; ?>

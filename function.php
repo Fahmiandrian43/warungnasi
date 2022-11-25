@@ -105,7 +105,7 @@ function katagori($data)
             </script>";
     }
 
-    mysqli_query($conn, "INSERT INTO katagori VALUE ('','', '$nama')");
+    mysqli_query($conn, "INSERT INTO katagori VALUE ('', '$nama')");
 
     return mysqli_affected_rows($conn);
 }
@@ -118,16 +118,6 @@ function hapusKatagori($id)
 
     return mysqli_affected_rows($conn);
 }
-
-function hapusbarang($id)
-{
-    global $conn;
-
-    mysqli_query($conn, "DELETE FROM barang WHERE id = $id");
-
-    return mysqli_affected_rows($conn);
-}
-
 
 function ubahKatagori($data)
 {
@@ -254,6 +244,22 @@ function ubahBarang($data)
     }
 
     $query = "UPDATE barang SET nama = $nama, katagori = $katagori, jumlah = $jumlah, gambar = $gambar WHERE id = $id";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function keranjang($data)
+{
+    global $conn;
+
+    $orderid = $data["orderid"];
+    $gambar = $data["gambar"];
+    $nama = $data["nama"];
+    $harga = $data["harga"];
+
+    $query = "INSERT INTO keranjang VALUE ('', '$orderid', '$nama', '$harga', '1', '$gambar')";
 
     mysqli_query($conn, $query);
 
