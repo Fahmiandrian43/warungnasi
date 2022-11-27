@@ -14,6 +14,8 @@ $katagori = query("SELECT * FROM katagori");
 
 $keranjang = query("SELECT * FROM keranjang");
 
+// $users = query("SELECT * FROM users");
+
 
 ?>
 
@@ -69,21 +71,26 @@ $keranjang = query("SELECT * FROM keranjang");
         </form>
 
         <div class="shopping-cart">
-            <?php if ($_SESSION["login"]) { ?>
-                <?php foreach ($keranjang as $cart) : ?>
-                    <div class="box">
-                        <i class="fas fa-trash"></i>
-                        <img src="admin/img/<?= $cart["image"] ?>" alt="<?= $cart["image"] ?>">
-                        <div class="content">
-                            <h3><?= $cart["nama"] ?></h3>
-                            <span class="price">Rp. <?= $cart["harga"] ?></span>
-                            <span class="quantity">qty : <?= $cart["jumlah"] ?></span>
+            <?php if (isset($_SESSION["login"])) {
+                if ($_SESSION['user'] == $_SESSION['id']) { ?>
+                    <?php foreach ($keranjang as $cart) : ?>
+                        <div class="box">
+                            <a href="hapus.php?id=<?= $cart["id"] ?>" class="fas fa-trash"></a>
+                            <img src="admin/img/<?= $cart["image"] ?>" alt="<?= $cart["image"] ?>">
+                            <div class="content">
+                                <h3><?= $cart["nama"] ?></h3>
+                                <span class="price">Rp. <?= $cart["harga"] ?></span>
+                                <span class="quantity">qty : <?= $cart["jumlah"] ?></span>
+                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-                <div class="total"> total : $19.69/- </div>
-                <a href="beli.php?id=<?= $cart["id"] ?>" class="btn">checkout</a>
-            <?php } else { ?>
+                        <div class="total"> total : $19.69/- </div>
+                        <a href="beli.php?id=<?= $cart["id"] ?>" class="btn">checkout</a>
+                    <?php endforeach; ?>
+                <?php } else {
+                    echo '
+                            <p>tidak ada belanjaan</p>';
+                }
+            } else { ?>
                 <p>Tidak Ada Keranjang Silahkan login</p>
             <?php } ?>
         </div>
@@ -209,7 +216,7 @@ $keranjang = query("SELECT * FROM keranjang");
                 <div class="box">
                     <img src="https://source.unsplash.com/500x400?<?= $row["nama"] ?>" alt="<?= $row["nama"] ?>">
                     <h3><?= $row["nama"] ?></h3>
-                    <a href="#products" class="btn">shop now</a>
+                    <a href="katagori.php?id=" class="btn">shop now</a>
                 </div>
             <?php endforeach; ?>
 

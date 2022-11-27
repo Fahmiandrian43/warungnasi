@@ -258,10 +258,24 @@ function keranjang($data)
     $gambar = $data["gambar"];
     $nama = $data["nama"];
     $harga = $data["harga"];
+    $user = $data["user"];
 
-    $query = "INSERT INTO keranjang VALUE ('', '$orderid', '$nama', '$harga', '1', '$gambar')";
+
+    $query = "INSERT INTO keranjang VALUE ('', '$orderid','$user', '$nama', '$harga', '1', '$gambar')";
 
     mysqli_query($conn, $query);
+
+
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusKeranjang($id)
+{
+    global $conn;
+
+
+    mysqli_query($conn, "DELETE FROM keranjang WHERE id = $id");
 
     return mysqli_affected_rows($conn);
 }

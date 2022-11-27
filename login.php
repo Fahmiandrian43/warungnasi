@@ -7,12 +7,21 @@ if (isset($_SESSION["login"])) {
 }
 require 'function.php';
 
+
 if (isset($_POST["login"])) {
 
     $email = strtolower($_POST["email"]);
     $password = $_POST["password"];
 
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
+    $querycart = ("SELECT * FROM keranjang");
+    $resultcart = mysqli_query($conn, $querycart);
+    $rowcart = mysqli_fetch_assoc($resultcart);
+
+
+    $queryuser = ("SELECT * FROM users WHERE email = '$email'");
+
+
+    $result = mysqli_query($conn, $queryuser);
 
     //cek email
     if (mysqli_num_rows($result) === 1) {
@@ -22,9 +31,11 @@ if (isset($_POST["login"])) {
         if (password_verify($password, $row["password"])) {
 
             //set session
+            $_SESSION['id'] = $row['id'];
             $_SESSION['nama'] = $row['nama'];
             $_SESSION['status'] = $row['status'];
             $_SESSION["login"] = true;
+            $_SESSION['user'] = $rowcart['user'];
 
             header("Location: index.php");
             exit;

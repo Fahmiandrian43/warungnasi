@@ -148,25 +148,6 @@ if (isset($_POST["submit"])) {
         <div class="container">
             <div class="row">
                 <div class="col align-self-center">
-                    <div class="card mb-3">
-                        <img src="admin/img/<?= $barang["gambar"] ?>" class="card-img-top" alt="<?= $barang["gambar"] ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= $barang["nama"] ?></h5>
-                            <p class="card-text"><?= $barang["nama"] ?></p>
-                            <?php if (isset($_SESSION["login"])) { ?>
-                                <form action="" method="post">
-                                    <input type="hidden" name="orderid" value="<?= $barang["id"] ?>">
-                                    <input type="hidden" name="gambar" value="<?= $barang["gambar"] ?>">
-                                    <input type="hidden" name="nama" value="<?= $barang["nama"] ?>">
-                                    <input type="hidden" name="user" value="<?= $_SESSION['id'] ?>">
-                                    <input type="hidden" name="harga" value="<?= $barang["harga"] ?>">
-                                    <button type="submit" name="submit" class="btn btn-outline-primary">Keranjang</button>
-                                </form>
-                                <a href="beli.php?id=<?= $barang["id"] ?>" type="button" class="btn btn-outline-primary">Beli</a>
-                            <?php } ?>
-                        </div>
-                    </div>
-
 
                 </div>
             </div>
