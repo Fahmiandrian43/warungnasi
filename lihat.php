@@ -14,18 +14,34 @@ $barang = query("SELECT * FROM barang WHERE id = $id")[0];
 
 $katagori = query("SELECT * FROM katagori");
 
-$keranjang = query("SELECT * FROM keranjang");
+if (isset($_SESSION["login"])) {
+
+    $idd = $_SESSION["id"];
+    // $result = mysqli_query($conn, "SELECT * from keranjang inner join  barang on keranjang.idbarang = barang.id where keranjang.user = $idd");
+    // $keranjang = mysqli_fetch_assoc($result);
+    $keranjang = query("SELECT * from keranjang inner join  barang on keranjang.idbarang = barang.id where keranjang.user = $idd");
+}
+
+$result = mysqli_query($conn, "SELECT idbarang FROM keranjang WHERE idbarang = $id and user = $idd");
 
 
 if (isset($_POST["submit"])) {
-    if (keranjang($_POST) > 0) {
-        echo "<script>
+    if (!mysqli_fetch_assoc($result)) {
+        if (keranjang($_POST) > 0) {
+            echo "<script>
                 alert('Anda menambahkan Barang!');
             </script>";
-    } else {
-        echo "<script>
+        } else {
+            echo "<script>
                 alert('Gagal menambahkan barang!');
             </script>";
+        }
+    } else {
+        echo
+        "<script>
+            alert('barang sudah ada dikeranjang!');
+        </script>
+        ";
     }
 }
 
@@ -84,20 +100,19 @@ if (isset($_POST["submit"])) {
         </form>
 
         <div class="shopping-cart">
-            <?php if ($_SESSION["login"]) { ?>
+            <?php if (isset($_SESSION["login"])) { ?>
                 <?php foreach ($keranjang as $cart) : ?>
                     <div class="box">
-                        <i class="fas fa-trash"></i>
-                        <img src="admin/img/<?= $cart["image"] ?>" alt="<?= $cart["image"] ?>">
+                        <a href="hapus.php?id=<?= $cart["idkeranjang"] ?>" class="fas fa-trash"></a>
+                        <img src="admin/img/<?= $cart["imagekeranjang"] ?>" alt="<?= $cart["imagekeranjang"] ?>">
                         <div class="content">
-                            <h3><?= $cart["nama"] ?></h3>
+                            <h3><?= $cart["namakeranjang"] ?></h3>
                             <span class="price">Rp. <?= $cart["harga"] ?></span>
-                            <span class="quantity">qty : <?= $cart["jumlah"] ?></span>
                         </div>
                     </div>
+                    <?php  ?>
+                    <a href="beli.php?id=<?= $cart["idkeranjang"] ?>" class="btn">checkout</a>
                 <?php endforeach; ?>
-                <div class="total"> total : $19.69/- </div>
-                <a href="beli.php?id=<?= $cart["id"] ?>" class="btn">checkout</a>
             <?php } else { ?>
                 <p>Tidak Ada Keranjang Silahkan login</p>
             <?php } ?>
@@ -155,14 +170,14 @@ if (isset($_POST["submit"])) {
                             <p class="card-text"><?= $barang["nama"] ?></p>
                             <?php if (isset($_SESSION["login"])) { ?>
                                 <form action="" method="post">
-                                    <input type="hidden" name="orderid" value="<?= $barang["id"] ?>">
-                                    <input type="hidden" name="gambar" value="<?= $barang["gambar"] ?>">
+                                    <input type="hidden" name="idkeranjang" value="">
+                                    <input type="hidden" name="idbarang" value="<?= $barang["id"] ?>">
+                                    <input type="hidden" name="image" value="<?= $barang["gambar"] ?>">
                                     <input type="hidden" name="nama" value="<?= $barang["nama"] ?>">
                                     <input type="hidden" name="user" value="<?= $_SESSION['id'] ?>">
-                                    <input type="hidden" name="harga" value="<?= $barang["harga"] ?>">
                                     <button type="submit" name="submit" class="btn btn-outline-primary">Keranjang</button>
                                 </form>
-                                <a href="beli.php?id=<?= $barang["id"] ?>" type="button" class="btn btn-outline-primary">Beli</a>
+                                <a href="beli.php" type="button" class="btn btn-outline-primary">Beli</a>
                             <?php } ?>
                         </div>
                     </div>

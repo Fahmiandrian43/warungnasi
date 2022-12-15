@@ -11,10 +11,19 @@ require 'function.php';
 $barang = query("SELECT * FROM barang");
 
 $katagori = query("SELECT * FROM katagori");
+if (isset($_SESSION["login"])) {
 
-$keranjang = query("SELECT * FROM keranjang");
+    $id = $_SESSION["id"];
 
-// $users = query("SELECT * FROM users");
+    $keranjang = query("SELECT * from keranjang inner join  barang on keranjang.idbarang = barang.id where keranjang.user = $id and status='cart'");
+}
+
+$result = mysqli_query($conn, "SELECT * from keranjang inner join  barang on keranjang.idbarang = barang.id where keranjang.user = $id");
+
+$keranjang1 = mysqli_fetch_array($result);
+// var_dump(count($keranjang1["user"]));
+// exit;
+// $cart1 = query("SELECT * FROM keranjang");
 
 
 ?>
@@ -71,26 +80,20 @@ $keranjang = query("SELECT * FROM keranjang");
         </form>
 
         <div class="shopping-cart">
-            <?php if (isset($_SESSION["login"])) {
-                if ($_SESSION['user'] == $_SESSION['id']) { ?>
-                    <?php foreach ($keranjang as $cart) : ?>
-                        <div class="box">
-                            <a href="hapus.php?id=<?= $cart["id"] ?>" class="fas fa-trash"></a>
-                            <img src="admin/img/<?= $cart["image"] ?>" alt="<?= $cart["image"] ?>">
-                            <div class="content">
-                                <h3><?= $cart["nama"] ?></h3>
-                                <span class="price">Rp. <?= $cart["harga"] ?></span>
-                                <span class="quantity">qty : <?= $cart["jumlah"] ?></span>
-                            </div>
+            <?php if (isset($_SESSION["login"])) { ?>
+                <?php foreach ($keranjang as $cart) : ?>
+                    <div class="box">
+                        <a href="hapus.php?id=<?= $cart["idkeranjang"] ?>" class="fas fa-trash"></a>
+                        <img src="admin/img/<?= $cart["imagekeranjang"] ?>" alt="<?= $cart["imagekeranjang"] ?>">
+                        <div class="content">
+                            <h3><?= $cart["namakeranjang"] ?></h3>
+                            <span class="price">Rp. <?= $cart["harga"] ?></span>
                         </div>
-                        <div class="total"> total : $19.69/- </div>
-                        <a href="beli.php?id=<?= $cart["id"] ?>" class="btn">checkout</a>
-                    <?php endforeach; ?>
-                <?php } else {
-                    echo '
-                            <p>tidak ada belanjaan</p>';
-                }
-            } else { ?>
+                    </div>
+                    <?php  ?>
+                    <a href="beli.php" class="btn">checkout</a>
+                <?php endforeach; ?>
+            <?php } else { ?>
                 <p>Tidak Ada Keranjang Silahkan login</p>
             <?php } ?>
         </div>
@@ -335,20 +338,6 @@ $keranjang = query("SELECT * FROM keranjang");
     </section>
 
     <!-- footer section ends -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 

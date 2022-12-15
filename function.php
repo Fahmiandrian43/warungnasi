@@ -254,16 +254,16 @@ function keranjang($data)
 {
     global $conn;
 
-    $orderid = $data["orderid"];
-    $gambar = $data["gambar"];
+    $idkeranjang = $data["idkeranjang"];
+    $orderid = $data["idbarang"];
+    $gambar = $data["image"];
     $nama = $data["nama"];
-    $harga = $data["harga"];
     $user = $data["user"];
 
 
-    $query = "INSERT INTO keranjang VALUE ('', '$orderid','$user', '$nama', '$harga', '1', '$gambar')";
+    $querytambah = "INSERT INTO keranjang VALUE ('', '$orderid','$user', '$nama',  '1', '$gambar', '')";
 
-    mysqli_query($conn, $query);
+    mysqli_query($conn, $querytambah);
 
 
 

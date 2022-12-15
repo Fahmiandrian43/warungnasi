@@ -13,10 +13,6 @@ if (isset($_POST["login"])) {
     $email = strtolower($_POST["email"]);
     $password = $_POST["password"];
 
-    $querycart = ("SELECT * FROM keranjang");
-    $resultcart = mysqli_query($conn, $querycart);
-    $rowcart = mysqli_fetch_assoc($resultcart);
-
 
     $queryuser = ("SELECT * FROM users WHERE email = '$email'");
 
@@ -35,7 +31,6 @@ if (isset($_POST["login"])) {
             $_SESSION['nama'] = $row['nama'];
             $_SESSION['status'] = $row['status'];
             $_SESSION["login"] = true;
-            $_SESSION['user'] = $rowcart['user'];
 
             header("Location: index.php");
             exit;
